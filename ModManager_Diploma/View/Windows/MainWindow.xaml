@@ -6,14 +6,90 @@
         xmlns:local="clr-namespace:ModManager_Diploma"
         xmlns:ViewModel="clr-namespace:ModManager_Diploma.ViewModel" x:Class="ModManager_Diploma.MainWindow"
         mc:Ignorable="d"
-        Background="Gray"
-        Title="MainWindow" Height="450" Width="800">
+        Background="{Binding BackgroundWindow}"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        Title="MainWindow" Height="550" Width="900">
     <Window.DataContext>
         <ViewModel:MainWindowViewModel/>
     </Window.DataContext>
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Hidden">
-            <TextBlock Text="{Binding ModList}" FontSize="20" x:Name="textBlockTest"/>
-        </ScrollViewer>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border Background="Black"  Opacity="0.5" MouseDown="Border_MouseDown"/>
+        <Image Source="/Source/Images/Logo.png" HorizontalAlignment="Left" RenderOptions.BitmapScalingMode="HighQuality" Margin="5, 5, 0, 5"/>
+        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Focusable="False"  Template="{DynamicResource ResourceKey=ControlButtons}" Command="{Binding OpenInfo}">
+                <Button.Resources>
+                    <ImageSource x:Key="Img">pack://application:,,,/Source/Images/info.png</ImageSource>
+                </Button.Resources>
+            </Button>
+            <Button Focusable="False"  Template="{DynamicResource ResourceKey=ControlButtons}" Command="{Binding OpenSettings}">
+                <Button.Resources>
+                    <ImageSource x:Key="Img">pack://application:,,,/Source/Images/gear.png</ImageSource>
+                </Button.Resources>
+            </Button>
+            <Button Focusable="False" Template="{DynamicResource ResourceKey=ControlButtons}">
+                <Button.Resources>
+                    <ImageSource x:Key="Img">pack://application:,,,/Source/Images/window minimize.png</ImageSource>
+                </Button.Resources>
+            </Button>
+            <Button Focusable="False" Template="{DynamicResource ResourceKey=ControlButtons}">
+                <Button.Resources>
+                    <ImageSource x:Key="Img">pack://application:,,,/Source/Images/cross mark.png</ImageSource>
+                </Button.Resources>
+            </Button>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Name="SlideMenuGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid Name="SlideMenu" Grid.Column="0" Width="60" Grid.Row="1" HorizontalAlignment="Left">
+                <Grid.Style>
+                    <Style TargetType="{x:Type Grid}">
+                        <Style.Triggers>
+                            <EventTrigger RoutedEvent="MouseEnter">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0:0:0.3" Storyboard.TargetProperty="Width" To="225"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="MouseLeave">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0:0:0.3" Storyboard.TargetProperty="Width" To="60"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Border BorderThickness="1, 0, 1, 1" BorderBrush="#FF303031"/>
+                <Border BorderThickness="0" Background="Black" Opacity="0.5"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel Name="StackPanelSlideMenu" Height="auto" Orientation="Vertical" CanVerticallyScroll="True"/>
+                    </ScrollViewer>
+                    <Border Grid.Row="1" BorderThickness="0, 2, 0, 0" BorderBrush="#FF303031"/>
+                    <Border Grid.Row="1" BorderThickness="0, 1, 0, 0" BorderBrush="#474748"/>
+                    <Button Grid.Row="1" Command="{Binding CreateAssembler}" VerticalAlignment="Center" Focusable="False" Template="{DynamicResource ResourceKey=AddButton}" Content="Создать">
+                    </Button>
+                </Grid>
+            </Grid>
+            <Frame Navigated="Frame_Navigated" NavigationUIVisibility="Hidden" Grid.Column="1" Source="{Binding Page}"/>
+        </Grid>
     </Grid>
 </Window>

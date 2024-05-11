@@ -5,11 +5,41 @@
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Model\" />
-    <Folder Include="View\Pages\" />
+    <None Remove="Source\Images\check.png" />
+    <None Remove="Source\Images\cross mark.png" />
+    <None Remove="Source\Images\delete.png" />
+    <None Remove="Source\Images\folder.png" />
+    <None Remove="Source\Images\gear.png" />
+    <None Remove="Source\Images\img.png" />
+    <None Remove="Source\Images\info.png" />
+    <None Remove="Source\Images\Logo.ico" />
+    <None Remove="Source\Images\Logo.png" />
+    <None Remove="Source\Images\pencil.png" />
+    <None Remove="Source\Images\window minimize.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Source\Images\check.png" />
+    <Resource Include="Source\Images\cross mark.png" />
+    <Resource Include="Source\Images\delete.png" />
+    <Resource Include="Source\Images\folder.png" />
+    <Resource Include="Source\Images\gear.png" />
+    <Resource Include="Source\Images\img.png" />
+    <Resource Include="Source\Images\info.png" />
+    <Resource Include="Source\Images\Logo.ico" />
+    <Resource Include="Source\Images\Logo.png" />
+    <Resource Include="Source\Images\pencil.png" />
+    <Resource Include="Source\Images\window minimize.png" />
   </ItemGroup>
 
 </Project>

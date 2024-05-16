@@ -13,7 +13,8 @@ namespace ModManager_Diploma
         public MainWindow()
         {
             InitializeComponent();
-            (DataContext as MainWindowViewModel).GetMods();
+            //(DataContext as MainWindowViewModel).StartApplication();
+            //MainWindowViewModel.StartApp();
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)

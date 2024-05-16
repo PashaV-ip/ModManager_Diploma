@@ -1,0 +1,118 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ModManager_Diploma.View.Pages"
+      xmlns:ViewModel="clr-namespace:ModManager_Diploma.ViewModel" x:Class="ModManager_Diploma.View.Pages.CreateAssemblerPage"
+      mc:Ignorable="d" 
+      d:DesignHeight="890" d:DesignWidth="900"
+      Title="CreateAssemblerPage">
+
+    <Page.DataContext>
+        <ViewModel:CreateAssemblerPageViewModel/>
+    </Page.DataContext>
+
+    <Grid Width="900">
+        <!--Visibility="{Binding SettingsAssemblerVisible}"-->
+        <!--Сделал ещё одно окошко с настройкаи, нужно сделать настройки сборки!!!!-->
+        <!--<Border Background="#FF101010" Opacity="0.6" Width="60" HorizontalAlignment="Left"/>-->
+        <Border Background="#FF101010" Opacity="0.5"/>
+        <Grid Margin="35,10">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition Height="70"/>
+            </Grid.RowDefinitions>
+            <Border Grid.RowSpan="10" BorderThickness="2" BorderBrush="#FF303031" Grid.ColumnSpan="10" CornerRadius="20">
+                <Border Grid.RowSpan="10" BorderThickness="1" BorderBrush="#474748" Grid.ColumnSpan="10" CornerRadius="20"/>
+                <Border.Background>
+
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF232D3E"/>
+                        <GradientStop Color="#FF1D222C" Offset="1"/>
+                        <GradientStop Color="#FF1D202C" Offset="0.5"/>
+                    </LinearGradientBrush>
+
+                </Border.Background>
+            </Border>
+
+            <ScrollViewer Grid.RowSpan="2" VerticalScrollBarVisibility="Hidden" Margin="0, 50, 0, 0">
+                <StackPanel>
+                    <Grid HorizontalAlignment="Center" Margin="0, 0, 0, 50" Grid.Row="0"  Grid.ColumnSpan="15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="130"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Foreground="#FFC7C7C7" Content="Название сборки: " FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1" CaretBrush="#FFC7C7C7" Text="{Binding AssemblerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxStyle}" Foreground="#FFC7C7C7" Padding="0, 5" Margin="0,0,10,0" Width="400" VerticalAlignment="Center" FontSize="20"/>
+                    </Grid>
+
+                    <Grid HorizontalAlignment="Center" Margin="0, 0, 0, 50" Grid.Row="0"  Grid.ColumnSpan="15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="130"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Foreground="#FFC7C7C7" Content="Игра: " FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <ComboBox Style="{DynamicResource ComboBoxStyle}" SelectedValue="{Binding SelectGame}" ItemsSource="{Binding GameList}" Grid.Column="1" IsReadOnly="True" Padding="5, 5" Margin="0,0,10,0" Width="400" VerticalAlignment="Center" FontSize="20"/>
+                    </Grid>
+                    <Grid HorizontalAlignment="Center" Width="740" Margin="0, 0, 0, 50" Grid.Row="0"  Grid.ColumnSpan="15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Foreground="#FFC7C7C7" Text="Сохранять игровые миры: " TextWrapping="Wrap" TextAlignment="Center" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <StackPanel Visibility="{Binding PathToWorldsInGameVisible}" Grid.Column="1" Orientation="Horizontal">
+                            <TextBox CaretBrush="#FFC7C7C7" Text="{Binding PathToWorldsInGame, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxStyle}" Foreground="#FFC7C7C7" Padding="0, 5" Margin="0,0,10,0" Width="400" VerticalAlignment="Center" FontSize="20"/>
+                            <Button Focusable="False" CommandParameter="BrowseWorlds" Command="{Binding BrowseAssemblerPathToWorldsOrConfigs}" Template="{DynamicResource ResourceKey=SmallImageButton}" Margin="0, 0, 5, 0" Width="30" Height="30">
+                                <Button.Resources>
+                                    <ImageSource x:Key="Img">pack://application:,,,/Source/Images/folder.png</ImageSource>
+                                </Button.Resources>
+                            </Button>
+                        </StackPanel>
+
+                        <CheckBox Foreground="#FFC7C7C7" Style="{DynamicResource CheckBoxStyle}" Grid.Column="2" HorizontalAlignment="Left" Margin="20, 0" VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <Grid HorizontalAlignment="Center" Width="740" Margin="0, 0, 0, 50" Grid.Row="0"  Grid.ColumnSpan="15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Foreground="#FFC7C7C7" Text="Сохранять файлы конфигурации: " TextWrapping="Wrap" TextAlignment="Center" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        <StackPanel Visibility="{Binding PathToConfigsInGameVisible}" Grid.Column="1" Orientation="Horizontal">
+                            <TextBox CaretBrush="#FFC7C7C7" Text="{Binding PathToConfigsInGame, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxStyle}" Foreground="#FFC7C7C7" Padding="0, 5" Margin="0,0,10,0" Width="400" VerticalAlignment="Center" FontSize="20"/>
+                            <Button Focusable="False" CommandParameter="BrowseConfigs" Command="{Binding BrowseAssemblerPathToWorldsOrConfigs}" Template="{DynamicResource ResourceKey=SmallImageButton}" Margin="0, 0, 5, 0" Width="30" Height="30">
+                                <Button.Resources>
+                                    <ImageSource x:Key="Img">pack://application:,,,/Source/Images/folder.png</ImageSource>
+                                </Button.Resources>
+                            </Button>
+                        </StackPanel>
+                        <CheckBox Style="{DynamicResource CheckBoxStyle}" Grid.Column="2" HorizontalAlignment="Left" Margin="20, 0" VerticalAlignment="Center"/>
+                    </Grid>
+                    <Grid>
+                        <TextBlock Background="White"/>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+
+
+
+
+            <Border Grid.Row="4" Grid.ColumnSpan="15" Background="{Binding ColorPanels}" Opacity="{Binding OpacityPanels}" CornerRadius="0, 0, 20, 20" Margin="3"/>
+            <StackPanel Margin="0, 10, 0, 10" HorizontalAlignment="Center" Grid.Row="4" Grid.ColumnSpan="15" Orientation="Horizontal">
+                <Button Width="150" Grid.Row="1" Margin="10, 0, 50, 0" VerticalAlignment="Center" Focusable="False" Template="{DynamicResource ResourceKey=BrowseButtonInOptions}" Command="{Binding SaveAssemblerOption}" Content="Сохранить">
+
+                </Button>
+                <Button Width="150" Grid.Row="1" Margin="50, 0, 10, 0" VerticalAlignment="Center" Focusable="False" Template="{DynamicResource ResourceKey=BrowseButtonInOptions}" Command="{Binding CancleSettings}" Content="Отмена">
+
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

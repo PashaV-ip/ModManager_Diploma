@@ -10,25 +10,46 @@ using ModManager_Diploma.Model;
 using System.Windows.Media;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
+using System.Windows.Controls;
+using System.Windows;
+using System.Runtime.CompilerServices;
 
 namespace ModManager_Diploma.ViewModel
 {
     public class MainWindowViewModel : BaseViewModel
     {
-        public IniFile ini;
-        private string _modList;
-        private ImageBrush _backgroundWindow;
-        private Uri _page = new Uri("pack://application:,,,/View/Pages/AboutTheProgram.xaml");
-        public string ModList
+        #region Delegates
+        
+        #endregion
+
+
+        private static IniFile _ini;
+        private WindowState _stateWindow;
+        private static Brush _backgroundWindow;
+        private Uri _page;
+        private Uri _mainPage;
+        private static string? _pathToAssemblersFolder;
+        private static double _opacityPanels;
+        private static SolidColorBrush _colorPanels;
+
+        public static IniFile Ini
         {
-            get => _modList;
+            get => _ini;
             set
             {
-                _modList = value;
-                OnPropertyChanged(nameof(ModList));
+                _ini = value;
             }
         }
-        public ImageBrush BackgroundWindow
+        public WindowState StateWindow
+        {
+            get => _stateWindow;
+            set
+            {
+                _stateWindow = value;
+                OnPropertyChanged(nameof(StateWindow));
+            }
+        }
+        public Brush BackgroundWindow
         {
             get => _backgroundWindow;
             set
@@ -46,7 +67,78 @@ namespace ModManager_Diploma.ViewModel
                 OnPropertyChanged(nameof(Page));
             }
         }
+        public Uri MainPage
+        {
+            get => _mainPage;
+            set
+            {
+                _mainPage = value;
+                OnPropertyChanged(nameof(MainPage));
+            }
+        }
+        public string PathToAssemblersFolder
+        {
+            get => _pathToAssemblersFolder;
+            set
+            {
+                _pathToAssemblersFolder = value;
+                OnPropertyChanged(nameof(PathToAssemblersFolder));
+            }
+        }
+        public double OpacityPanels
+        {
+            get => _opacityPanels;
+            set
+            {
+                _opacityPanels = double.Parse(value.ToString("F2"));
+                OnPropertyChanged(nameof(OpacityPanels));
+            }
+        }
+        public SolidColorBrush ColorPanels
+        {
+            get => _colorPanels;
+            set
+            {
+                _colorPanels = value;
+                //ColorPanelsStatic = value;
+                OnPropertyChanged(nameof(ColorPanels));
+            }
+        }
 
+        public static SolidColorBrush ColorPanelsStatic { 
+            get => _colorPanels;
+            set
+            {
+                _colorPanels = value;
+            } 
+        }
+
+        #region ControlsWindow
+        public ICommand CloseApplication
+        {
+            get
+            {
+                return new RelayCommand(() => { foreach (System.Windows.Window w in App.Current.Windows) w.Close(); });
+            }
+        }
+        public ICommand MinimizeWindow
+        {
+            get
+            {
+                return new RelayCommand(() => { StateWindow = System.Windows.WindowState.Minimized; });
+            }
+        }
+        #endregion
+
+        public ICommand OpenCreateAssemblerPage
+        {
+            get
+            {
+                return new RelayCommand(() => {
+                    MainPage = new Uri("pack://application:,,,/View/Pages/CreateAssemblerPage.xaml");
+                });
+            }
+        }
 
         public ICommand OpenInfo
         {
@@ -62,57 +154,139 @@ namespace ModManager_Diploma.ViewModel
             get
             {
                 return new RelayCommand(() => {
-                    Page = new Uri("pack://application:,,,/View/Pages/AboutTheProgram.xaml");
+                    OptionsPageViewModel.SetBaseValues(PathToAssemblersFolder, OpacityPanels, ColorPanels);
+                    MainPage = new Uri("pack://application:,,,/View/Pages/OptionsPage.xaml");
                 });
             }
         }
-
-
-        public void GetMods()
+        public static void StartApp()
         {
-            /*string path = "D://Minecraft//Minecraft//game//mods";
-            DirectoryInfo directory = new DirectoryInfo(path);
-            foreach (var mods in directory.GetFiles())
+            CreateFolderStructure();
+            CreateMainSettingsINI();
+        }
+        private static IniFile GetIniFileSettings()
+        {
+            CreateMainSettingsINI();
+            return new IniFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ModManager/Configs/Settings.ini"));
+        }
+        private static void CreateMainSettingsINI()
+        {
+            if(!File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ModManager/Configs/Settings.ini")))
             {
-                ModList += mods.Name + "\n";
+                IniFile ini = new IniFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ModManager/Configs/Settings.ini"));
+                ini.Write("PathToTheAssemblersFolder", "", "ModManager");
+                ini.Write("ColorPanels", "#FF000000", "ModManager");
+                ini.Write("OpacityPanels", "0,7", "ModManager");
             }
-            ModList += "\n\n" + Directory.GetCurrentDirectory() + "\n\n" +
-                new Uri("pack://application:,,,/Source/Images/img.png", UriKind.Absolute).AbsolutePath + "\n\n" +
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
-            //FileInfo file = new FileInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
-            Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TestModManagerFolder/Configs"));
-            Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TestModManagerFolder/Images"));
-
-            if(!File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TestModManagerFolder", "Configs/Settings.ini")))
+        }
+        private static void CreateFolderStructure()
+        {
+            if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ModManager/Configs")) || !Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ModManager/Images")))
             {
-                ini = new IniFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TestModManagerFolder", "Configs/Settings.ini"));
-                ini.Write("Num", "0");
-                Integer = 0;
+                Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ModManager/Configs"));
+                Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ModManager/Images"));
             }
-            else
-            {
-                ini = new IniFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TestModManagerFolder", "Configs/Settings.ini"));
-                Integer = int.Parse(ini.Read("Num")) + 1;
-                ini.Write("Num", Integer.ToString());
-            }*/
-            
+        }
 
-            if(File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TestModManagerFolder/Images/img.png")))
+        private static Brush GetBackground()
+        {
+            if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ModManager/Images/img.png")))
             {
                 BitmapImage image = new BitmapImage();
                 image.BeginInit();
                 image.CacheOption = BitmapCacheOption.OnLoad;
                 image.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                //image.UriSource = new Uri("../../../Source/Images/Backgrounds/Background.png", UriKind.Relative);
-                image.UriSource = new Uri(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "TestModManagerFolder/Images/img.png"), UriKind.Relative);
+                image.UriSource = new Uri(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ModManager/Images/img.png"), UriKind.Relative);
                 image.EndInit();
-                BackgroundWindow = new ImageBrush(image);
+                return new ImageBrush(image);
             }
-            //Directory.CreateDirectory("../../../Test");
-            //DirectoryInfo dir = new DirectoryInfo("D:\\4 Курс\\Диплом\\ModManager_Diploma\\ModManager_Diploma\\TestFolder");
-            //new Uri("pack://application:,,,/Source/Images/img.png", UriKind.Absolute)
+            else
+            {
+                return new SolidColorBrush(Colors.White);
+            }
+        }
 
+        public static string GetPathToAssemblersFolder()
+        {
+            return Ini.Read("PathToTheAssemblersFolder", "ModManager");
+        }
+
+        public static double GetOpacityPanels()
+        {
+            return double.Parse(Ini.Read("OpacityPanels", "ModManager"));
+        }
+
+        public static SolidColorBrush GetColorPanels()
+        {
+            return new SolidColorBrush((Color)ColorConverter.ConvertFromString(Ini.Read("ColorPanels", "ModManager")));
+        }
+
+        #region PagesControlsMethods
+        private void CloseMainPage()
+        {
+            OpacityPanels = GetOpacityPanels();
+            ColorPanels = GetColorPanels();
+            BackgroundWindow = GetBackground();
+            MainPage = null;
+        }
+        #endregion
+
+        #region MainSettings
+        private void SaveMainOptions(string pathAssemblers, double opacityPanels, SolidColorBrush colorPanels, string? pathToBackground = null)
+        {           
+            PathToAssemblersFolder = pathAssemblers;
+            OpacityPanels = opacityPanels;
+            ColorPanels = colorPanels;
+            
+            CreateAssemblerPageViewModel.SetOpacityPanels(OpacityPanels);
+            CreateAssemblerPageViewModel.SetColorPanels(ColorPanels);
+            //CreateAssemblerPageViewModel.ColorPanels = ColorPanels;
+            if (!Directory.Exists(PathToAssemblersFolder)) PathToAssemblersFolder = "";
+            if (pathToBackground != null)
+            {
+                ReplaceBackground(pathToBackground);
+            }
+            Ini.Write("PathToTheAssemblersFolder", PathToAssemblersFolder, "ModManager");
+            Ini.Write("ColorPanels", ColorPanels.Color.ToString(), "ModManager");
+            Ini.Write("OpacityPanels", OpacityPanels.ToString(), "ModManager");
+
+            MainPage = null;
+        }
+
+        private void ReplaceBackground(string pathToBackground)
+        {
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ModManager/Images/img.png");
+            //MessageBox.Show(path + "\n" + pathToBackground);
+            File.Delete(path);
+            File.Copy(pathToBackground, path);
+        }
+
+        private void SetPathToAssemblers(string path)
+        {
+            PathToAssemblersFolder = path;
+        }
+
+        private void SetNewBackground(Brush brush)
+        {
+            BackgroundWindow = brush;
+        }
+        #endregion
+
+
+        public MainWindowViewModel()
+        {
+            StateWindow = WindowState.Normal;
+            StartApp();
+            Ini = GetIniFileSettings();
+            BackgroundWindow = GetBackground();
+            Page = new Uri("pack://application:,,,/View/Pages/AboutTheProgram.xaml");
+            PathToAssemblersFolder = GetPathToAssemblersFolder();
+            OpacityPanels = GetOpacityPanels();
+            ColorPanels = GetColorPanels();
+            OptionsPageViewModel.CloseOptions += CloseMainPage;
+            OptionsPageViewModel.SaveOptions += SaveMainOptions;
+            OptionsPageViewModel.SetNewBackground += SetNewBackground;
+            CreateAssemblerPageViewModel.CloseAssemblerOptions += CloseMainPage;
         }
     }
 }

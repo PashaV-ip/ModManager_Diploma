@@ -6,8 +6,10 @@
         xmlns:local="clr-namespace:ModManager_Diploma"
         xmlns:ViewModel="clr-namespace:ModManager_Diploma.ViewModel" x:Class="ModManager_Diploma.MainWindow"
         mc:Ignorable="d"
+        WindowStyle="None"
         Background="{Binding BackgroundWindow}"
         ResizeMode="CanMinimize"
+        WindowState="{Binding StateWindow}"
         WindowStartupLocation="CenterScreen"
         Title="MainWindow" Height="550" Width="900">
     <Window.DataContext>
@@ -18,8 +20,8 @@
             <RowDefinition Height="60"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Border Background="Black"  Opacity="0.5" MouseDown="Border_MouseDown"/>
-        <Image Source="/Source/Images/Logo.png" HorizontalAlignment="Left" RenderOptions.BitmapScalingMode="HighQuality" Margin="5, 5, 0, 5"/>
+        <Border Background="{Binding ColorPanels}"  Opacity="{Binding OpacityPanels}" MouseDown="Border_MouseDown"/>
+        <Image Source="pack://application:,,,/Source/Images/Logo.png" HorizontalAlignment="Left" RenderOptions.BitmapScalingMode="HighQuality" Margin="5, 5, 0, 5"/>
         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
             <Button Focusable="False"  Template="{DynamicResource ResourceKey=ControlButtons}" Command="{Binding OpenInfo}">
                 <Button.Resources>
@@ -31,12 +33,12 @@
                     <ImageSource x:Key="Img">pack://application:,,,/Source/Images/gear.png</ImageSource>
                 </Button.Resources>
             </Button>
-            <Button Focusable="False" Template="{DynamicResource ResourceKey=ControlButtons}">
+            <Button Focusable="False" Template="{DynamicResource ResourceKey=ControlButtons}" Command="{Binding MinimizeWindow}">
                 <Button.Resources>
                     <ImageSource x:Key="Img">pack://application:,,,/Source/Images/window minimize.png</ImageSource>
                 </Button.Resources>
             </Button>
-            <Button Focusable="False" Template="{DynamicResource ResourceKey=ControlButtons}">
+            <Button Focusable="False" Template="{DynamicResource ResourceKey=ControlButtons}" Command="{Binding CloseApplication}">
                 <Button.Resources>
                     <ImageSource x:Key="Img">pack://application:,,,/Source/Images/cross mark.png</ImageSource>
                 </Button.Resources>
@@ -74,7 +76,7 @@
                     </Style>
                 </Grid.Style>
                 <Border BorderThickness="1, 0, 1, 1" BorderBrush="#FF303031"/>
-                <Border BorderThickness="0" Background="Black" Opacity="0.5"/>
+                <Border BorderThickness="0" Background="{Binding ColorPanels}" Opacity="{Binding OpacityPanels}"/>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -85,11 +87,12 @@
                     </ScrollViewer>
                     <Border Grid.Row="1" BorderThickness="0, 2, 0, 0" BorderBrush="#FF303031"/>
                     <Border Grid.Row="1" BorderThickness="0, 1, 0, 0" BorderBrush="#474748"/>
-                    <Button Grid.Row="1" Command="{Binding CreateAssembler}" VerticalAlignment="Center" Focusable="False" Template="{DynamicResource ResourceKey=AddButton}" Content="Создать">
+                    <Button Grid.Row="1" Command="{Binding OpenCreateAssemblerPage}" VerticalAlignment="Center" Focusable="False" Template="{DynamicResource ResourceKey=AddButton}" Content="Создать">
                     </Button>
                 </Grid>
             </Grid>
             <Frame Navigated="Frame_Navigated" NavigationUIVisibility="Hidden" Grid.Column="1" Source="{Binding Page}"/>
         </Grid>
+        <Frame Navigated="Frame_Navigated" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" NavigationUIVisibility="Hidden" Grid.Column="1" Source="{Binding MainPage}"/>
     </Grid>
 </Window>

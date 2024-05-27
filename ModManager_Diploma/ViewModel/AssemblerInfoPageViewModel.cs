@@ -170,7 +170,7 @@ namespace ModManager_Diploma.ViewModel
                         }
                         else
                         {
-                            MessageBox.Show("Сборка: " + Name + "\n" + "Загружена");//----------------------
+                            //MessageBox.Show("Сборка: " + Name + "\n" + "Загружена");//----------------------
                             string pathToThisAssembler = Path.Combine(MainWindowViewModel.PathToAssemblersFolder, Assembler.GameName, "Assemblers", Assembler.Name);
                             string path = Path.Combine(pathToThisAssembler, "Worlds");
                             string path2 = Path.Combine(pathToThisAssembler, "Configs");

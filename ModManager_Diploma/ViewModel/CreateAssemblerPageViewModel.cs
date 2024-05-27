@@ -84,6 +84,7 @@ namespace ModManager_Diploma.ViewModel
             {
                 Assembler.GameName = value;
                 OnPropertyChanged(nameof(SelectGame));
+                if(!string.IsNullOrEmpty(value))
                 GetModsForGame(value);
             }
             /*get => _selectGame;
@@ -127,7 +128,7 @@ namespace ModManager_Diploma.ViewModel
             get
             {
                 return new RelayCommand(() => {
-                    if(AssemblerName != "" && SelectGame != "")
+                    if(!string.IsNullOrEmpty(AssemblerName) && !string.IsNullOrEmpty(SelectGame))
                     {
                         string pathToThisAssembler = Path.Combine(PathToAssemblersFolder, SelectGame, "Assemblers", AssemblerName);
                         if (!Directory.Exists(pathToThisAssembler))

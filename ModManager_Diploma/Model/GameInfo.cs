@@ -105,7 +105,6 @@ namespace ModManager_Diploma.Model
                         {
                             if (Directory.Exists(Path.Combine(MainWindowViewModel.PathToAssemblersFolder, NameGame)))
                             {
-                                System.Windows.MessageBox.Show("Папка существует");
                                 Directory.Delete(Path.Combine(MainWindowViewModel.PathToAssemblersFolder, NameGame), true);
                             }
                             MainWindowViewModel.Ini.DeleteKey(NameGame, "GameList");

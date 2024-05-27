@@ -81,8 +81,12 @@ namespace ModManager_Diploma.Model
                 OnPropertyChanged(nameof(IsCheckedSaveConfigs));
                 if (value)
                 {
-                    string path = new IniFile(Path.Combine(MainWindowViewModel.PathToAssemblersFolder, GameName, "Settings.ini")).Read("ConfigsPath", "Config");
-                    if (!string.IsNullOrEmpty(path)) PathToAssemblerConfigs = path;
+                    if (!string.IsNullOrEmpty(GameName) && !string.IsNullOrEmpty(MainWindowViewModel.PathToAssemblersFolder) && File.Exists(Path.Combine(MainWindowViewModel.PathToAssemblersFolder, GameName, "Settings.ini")))
+                    {
+                        string path = new IniFile(Path.Combine(MainWindowViewModel.PathToAssemblersFolder, GameName, "Settings.ini")).Read("ConfigsPath", "Config");
+                        if (!string.IsNullOrEmpty(path)) PathToAssemblerConfigs = path;
+                    }
+                    
                 }
                 else PathToAssemblerConfigs = "";
                 OnPropertyChanged(nameof(PathToConfigsVisible));
@@ -97,8 +101,11 @@ namespace ModManager_Diploma.Model
                 OnPropertyChanged(nameof(IsCheckedSaveWorlds));
                 if (value)
                 {
-                    string path = new IniFile(Path.Combine(MainWindowViewModel.PathToAssemblersFolder, GameName, "Settings.ini")).Read("WoldsPath", "Config");
-                    if (!string.IsNullOrEmpty(path)) PathToAssemblerWorlds = path;
+                    if (!string.IsNullOrEmpty(GameName) && !string.IsNullOrEmpty(MainWindowViewModel.PathToAssemblersFolder) && File.Exists(Path.Combine(MainWindowViewModel.PathToAssemblersFolder, GameName, "Settings.ini")))
+                    {
+                        string path = new IniFile(Path.Combine(MainWindowViewModel.PathToAssemblersFolder, GameName, "Settings.ini")).Read("WoldsPath", "Config");
+                        if (!string.IsNullOrEmpty(path)) PathToAssemblerWorlds = path;
+                    }
                 }
                 else PathToAssemblerWorlds = "";
                 OnPropertyChanged(nameof(PathToWorldsVisible));

@@ -83,7 +83,59 @@
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
                     <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
-                        <StackPanel Name="StackPanelSlideMenu" Height="auto" Orientation="Vertical" CanVerticallyScroll="True"/>
+                        <!--<StackPanel Height="auto" Orientation="Vertical" CanVerticallyScroll="True">
+                            <Button Template="{DynamicResource ResourceKey=SlideMenuButton}" Command="{Binding OpenAssembler}" Content="Магия">
+                                <Button.Resources>
+                                    <ImageSource x:Key="Img">/Source/Images/cross mark.png</ImageSource>
+                                </Button.Resources>
+                            </Button>
+                        </StackPanel>-->
+
+                        <ItemsControl Height="auto" ItemsSource="{Binding AssemblersList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel CanVerticallyScroll="True" Orientation="Vertical"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <!--<Image Source="{Binding Path=PathToImg}" Margin="15, 0" HorizontalAlignment="Left" Width="30" Height="30"/>
+                                    <Button Template="{DynamicResource ResourceKey=SlideMenuButton}" CommandParameter="{}" Command="{Binding Source={x:Static ViewModel:MainWindowViewModel.TestCommand}}" Content="{Binding Path=Name}">
+                                        <Button.Resources>
+                                            --><!--<ImageSource x:Key="Img"></ImageSource>-->
+                                            <!--<ImageSource x:Key="Img">/Source/Images/cross mark.png</ImageSource>--><!--
+                                        </Button.Resources>
+                                    </Button>-->
+                                        <TextBlock Text="{Binding NameGame}" FontSize="20" Margin="30, 0" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFC7C7C7"/>
+                                        <ItemsControl Grid.Row="1" Height="auto" ItemsSource="{Binding Path=Assemblers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel CanVerticallyScroll="True" Orientation="Vertical"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Image Source="{Binding Path=PathToImg}" Margin="15, 0" HorizontalAlignment="Left" Width="30" Height="30"/>
+                                                        <Button Template="{DynamicResource ResourceKey=SlideMenuButton}" Command="{Binding OpenAssemblerInfoPage}" Content="{Binding Path=Name}">
+                                                            <Button.Resources>
+                                                                <!--<ImageSource x:Key="Img"></ImageSource>-->
+                                                                <!--<ImageSource x:Key="Img">/Source/Images/cross mark.png</ImageSource>-->
+                                                            </Button.Resources>
+                                                        </Button>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </ScrollViewer>
                     <Border Grid.Row="1" BorderThickness="0, 2, 0, 0" BorderBrush="#FF303031"/>
                     <Border Grid.Row="1" BorderThickness="0, 1, 0, 0" BorderBrush="#474748"/>
@@ -91,7 +143,7 @@
                     </Button>
                 </Grid>
             </Grid>
-            <Frame Navigated="Frame_Navigated" NavigationUIVisibility="Hidden" Grid.Column="1" Source="{Binding Page}"/>
+            <Frame Navigated="Frame_Navigated" NavigationUIVisibility="Hidden" Grid.Column="1" Source="{Binding Page, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
         <Frame Navigated="Frame_Navigated" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" NavigationUIVisibility="Hidden" Grid.Column="1" Source="{Binding MainPage}"/>
     </Grid>

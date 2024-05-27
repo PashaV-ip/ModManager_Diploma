@@ -46,7 +46,7 @@
                             <ColumnDefinition Width="130"/>
                         </Grid.ColumnDefinitions>
                         <Label Foreground="#FFC7C7C7" Content="Название сборки: " FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBox Grid.Column="1" CaretBrush="#FFC7C7C7" Text="{Binding AssemblerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxStyle}" Foreground="#FFC7C7C7" Padding="0, 5" Margin="0,0,10,0" Width="400" VerticalAlignment="Center" FontSize="20"/>
+                        <TextBox IsEnabled="{Binding Assembler.IsNewAssembler}" Grid.Column="1" CaretBrush="#FFC7C7C7" Text="{Binding AssemblerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxStyle}" Foreground="#FFC7C7C7" Padding="0, 5" Margin="0,0,10,0" Width="400" VerticalAlignment="Center" FontSize="20"/>
                     </Grid>
 
                     <Grid HorizontalAlignment="Center" Margin="0, 0, 0, 50" Grid.Row="0"  Grid.ColumnSpan="15">
@@ -56,7 +56,7 @@
                             <ColumnDefinition Width="130"/>
                         </Grid.ColumnDefinitions>
                         <Label Foreground="#FFC7C7C7" Content="Игра: " FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <ComboBox Style="{DynamicResource ComboBoxStyle}" SelectedValue="{Binding SelectGame}" ItemsSource="{Binding GameList}" Grid.Column="1" IsReadOnly="True" Padding="5, 5" Margin="0,0,10,0" Width="400" VerticalAlignment="Center" FontSize="20"/>
+                        <ComboBox Style="{DynamicResource ComboBoxStyle}" SelectedValue="{Binding SelectGame, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding GameList}" Grid.Column="1" IsEnabled="{Binding Assembler.IsNewAssembler}" IsReadOnly="True" Padding="5, 5" Margin="0,0,10,0" Width="400" VerticalAlignment="Center" FontSize="20"/>
                     </Grid>
                     <Grid HorizontalAlignment="Center" Width="740" Margin="0, 0, 0, 50" Grid.Row="0"  Grid.ColumnSpan="15">
                         <Grid.ColumnDefinitions>
@@ -65,16 +65,16 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Foreground="#FFC7C7C7" Text="Сохранять игровые миры: " TextWrapping="Wrap" TextAlignment="Center" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <StackPanel Visibility="{Binding PathToWorldsInGameVisible}" Grid.Column="1" Orientation="Horizontal">
-                            <TextBox CaretBrush="#FFC7C7C7" Text="{Binding PathToWorldsInGame, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxStyle}" Foreground="#FFC7C7C7" Padding="0, 5" Margin="0,0,10,0" Width="400" VerticalAlignment="Center" FontSize="20"/>
-                            <Button Focusable="False" CommandParameter="BrowseWorlds" Command="{Binding BrowseAssemblerPathToWorldsOrConfigs}" Template="{DynamicResource ResourceKey=SmallImageButton}" Margin="0, 0, 5, 0" Width="30" Height="30">
+                        <StackPanel Visibility="{Binding Assembler.PathToWorldsVisible}" Grid.Column="1" Orientation="Horizontal">
+                            <TextBox CaretBrush="#FFC7C7C7" Text="{Binding Assembler.PathToAssemblerWorlds, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxStyle}" Foreground="#FFC7C7C7" Padding="0, 5" Margin="0,0,10,0" Width="400" VerticalAlignment="Center" FontSize="20"/>
+                            <Button Focusable="False" Command="{Binding BrowseWorldsFolder}" Template="{DynamicResource ResourceKey=SmallImageButton}" Margin="0, 0, 5, 0" Width="30" Height="30">
                                 <Button.Resources>
                                     <ImageSource x:Key="Img">pack://application:,,,/Source/Images/folder.png</ImageSource>
                                 </Button.Resources>
                             </Button>
                         </StackPanel>
 
-                        <CheckBox Foreground="#FFC7C7C7" Style="{DynamicResource CheckBoxStyle}" Grid.Column="2" HorizontalAlignment="Left" Margin="20, 0" VerticalAlignment="Center"/>
+                        <CheckBox IsChecked="{Binding Assembler.IsCheckedSaveWorlds}" Foreground="#FFC7C7C7" Style="{DynamicResource CheckBoxStyle}" Grid.Column="2" HorizontalAlignment="Left" Margin="20, 0" VerticalAlignment="Center"/>
                     </Grid>
 
                     <Grid HorizontalAlignment="Center" Width="740" Margin="0, 0, 0, 50" Grid.Row="0"  Grid.ColumnSpan="15">
@@ -85,18 +85,70 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Foreground="#FFC7C7C7" Text="Сохранять файлы конфигурации: " TextWrapping="Wrap" TextAlignment="Center" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-                        <StackPanel Visibility="{Binding PathToConfigsInGameVisible}" Grid.Column="1" Orientation="Horizontal">
-                            <TextBox CaretBrush="#FFC7C7C7" Text="{Binding PathToConfigsInGame, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxStyle}" Foreground="#FFC7C7C7" Padding="0, 5" Margin="0,0,10,0" Width="400" VerticalAlignment="Center" FontSize="20"/>
-                            <Button Focusable="False" CommandParameter="BrowseConfigs" Command="{Binding BrowseAssemblerPathToWorldsOrConfigs}" Template="{DynamicResource ResourceKey=SmallImageButton}" Margin="0, 0, 5, 0" Width="30" Height="30">
+                        <StackPanel Visibility="{Binding Assembler.PathToConfigsVisible}" Grid.Column="1" Orientation="Horizontal">
+                            <TextBox CaretBrush="#FFC7C7C7" Text="{Binding Assembler.PathToAssemblerConfigs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxStyle}" Foreground="#FFC7C7C7" Padding="0, 5" Margin="0,0,10,0" Width="400" VerticalAlignment="Center" FontSize="20"/>
+                            <Button Focusable="False" Command="{Binding BrowseConfigsFolder}" Template="{DynamicResource ResourceKey=SmallImageButton}" Margin="0, 0, 5, 0" Width="30" Height="30">
                                 <Button.Resources>
                                     <ImageSource x:Key="Img">pack://application:,,,/Source/Images/folder.png</ImageSource>
                                 </Button.Resources>
                             </Button>
                         </StackPanel>
-                        <CheckBox Style="{DynamicResource CheckBoxStyle}" Grid.Column="2" HorizontalAlignment="Left" Margin="20, 0" VerticalAlignment="Center"/>
+                        <CheckBox IsChecked="{Binding Assembler.IsCheckedSaveConfigs}" Style="{DynamicResource CheckBoxStyle}" Grid.Column="2" HorizontalAlignment="Left" Margin="20, 0" VerticalAlignment="Center"/>
                     </Grid>
-                    <Grid>
-                        <TextBlock Background="White"/>
+                    <Border BorderThickness="0, 3, 0, 0" CornerRadius="30" Margin="100, 0">
+                        <Border.BorderBrush>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF6F6F6F"/>
+                                <GradientStop Color="#FF383838" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.BorderBrush>
+                    </Border>
+                    <Label Foreground="#FFC7C7C7" Content="Моды" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border BorderThickness="0, 3, 0, 0" CornerRadius="30" Margin="100, 0">
+                        <Border.BorderBrush>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FF6F6F6F"/>
+                                <GradientStop Color="#FF383838" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.BorderBrush>
+                    </Border>
+                    <Grid Margin="50, 20, 50, 20">
+                        <!--<StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.ColumnSpan="3" BorderBrush="#FFC7C7C7" BorderThickness="1" CornerRadius="3"/>
+                                <Label FontSize="25" Margin="5,0" Foreground="#FFC7C7C7" Content="999"/>
+                                <Label Grid.Column="1" FontSize="25" Foreground="#FFC7C7C7" Content="Test.jar"/>
+                                <CheckBox HorizontalAlignment="Center" IsChecked="false" Style="{DynamicResource CheckBoxStyle}" Grid.Column="2" VerticalAlignment="Center"/>
+                            </Grid>
+                        </StackPanel>-->
+
+                        <ItemsControl Height="auto" ItemsSource="{Binding ModList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="60"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="100"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.ColumnSpan="3" BorderBrush="#FFC7C7C7" BorderThickness="1" CornerRadius="3"/>
+                                        <Label HorizontalAlignment="Center" FontSize="25" Margin="5,0" Foreground="#FFC7C7C7" Content="{Binding Path=Number}"/>
+                                        <Label Grid.Column="1" FontSize="25" Foreground="#FFC7C7C7" Content="{Binding Path=Name}"/>
+                                        <CheckBox HorizontalAlignment="Center" IsChecked="{Binding Path=IsChecked}" Style="{DynamicResource CheckBoxStyle}" Grid.Column="2" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </Grid>
                 </StackPanel>
             </ScrollViewer>
@@ -106,7 +158,7 @@
 
             <Border Grid.Row="4" Grid.ColumnSpan="15" Background="{Binding ColorPanels}" Opacity="{Binding OpacityPanels}" CornerRadius="0, 0, 20, 20" Margin="3"/>
             <StackPanel Margin="0, 10, 0, 10" HorizontalAlignment="Center" Grid.Row="4" Grid.ColumnSpan="15" Orientation="Horizontal">
-                <Button Width="150" Grid.Row="1" Margin="10, 0, 50, 0" VerticalAlignment="Center" Focusable="False" Template="{DynamicResource ResourceKey=BrowseButtonInOptions}" Command="{Binding SaveAssemblerOption}" Content="Сохранить">
+                <Button Width="150" Grid.Row="1" Margin="10, 0, 50, 0" VerticalAlignment="Center" Focusable="False" Template="{DynamicResource ResourceKey=BrowseButtonInOptions}" Command="{Binding SaveSettings}" Content="Сохранить">
 
                 </Button>
                 <Button Width="150" Grid.Row="1" Margin="50, 0, 10, 0" VerticalAlignment="Center" Focusable="False" Template="{DynamicResource ResourceKey=BrowseButtonInOptions}" Command="{Binding CancleSettings}" Content="Отмена">

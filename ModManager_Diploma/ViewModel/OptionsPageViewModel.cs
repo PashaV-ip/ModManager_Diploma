@@ -158,7 +158,10 @@ namespace ModManager_Diploma.ViewModel
             GameList = new ObservableCollection<GameInfo>();
             foreach(var item in MainWindowViewModel.Ini.GetKeys("GameList"))
             {
-                GameList.Add(new GameInfo(RemoveGame, item.ToString(), MainWindowViewModel.Ini.Read(item, "GameList")));
+                if(item != "")
+                {
+                    GameList.Add(new GameInfo(RemoveGame, item.ToString(), MainWindowViewModel.Ini.Read(item, "GameList")));
+                }
             }
         }
     }

@@ -13,13 +13,18 @@ using GalaSoft.MvvmLight.Command;
 using System.Windows.Controls;
 using System.Windows;
 using System.Runtime.CompilerServices;
+using System.Collections.ObjectModel;
+using ModManager_Diploma.View.Pages;
+using System.Xml.Linq;
+using System.Reflection;
 
 namespace ModManager_Diploma.ViewModel
 {
     public class MainWindowViewModel : BaseViewModel
     {
-        #region Delegates
-        
+        #region Events
+        public static event EventHandler ImageChanged;
+        public static event EventHandler DeleteAssembler;
         #endregion
 
 
@@ -31,6 +36,7 @@ namespace ModManager_Diploma.ViewModel
         private static string? _pathToAssemblersFolder;
         private static double _opacityPanels;
         private static SolidColorBrush _colorPanels;
+        private static ObservableCollection<GameInfo> _assemblersList;
 
         public static IniFile Ini
         {
@@ -76,13 +82,13 @@ namespace ModManager_Diploma.ViewModel
                 OnPropertyChanged(nameof(MainPage));
             }
         }
-        public string PathToAssemblersFolder
+        public static string PathToAssemblersFolder
         {
             get => _pathToAssemblersFolder;
             set
             {
                 _pathToAssemblersFolder = value;
-                OnPropertyChanged(nameof(PathToAssemblersFolder));
+                //OnPropertyChanged(nameof(PathToAssemblersFolder));
             }
         }
         public double OpacityPanels
@@ -105,12 +111,14 @@ namespace ModManager_Diploma.ViewModel
             }
         }
 
-        public static SolidColorBrush ColorPanelsStatic { 
-            get => _colorPanels;
+        public ObservableCollection<GameInfo> AssemblersList
+        {
+            get => _assemblersList;
             set
             {
-                _colorPanels = value;
-            } 
+                _assemblersList = value;
+                OnPropertyChanged(nameof(AssemblersList));
+            }
         }
 
         #region ControlsWindow
@@ -135,6 +143,7 @@ namespace ModManager_Diploma.ViewModel
             get
             {
                 return new RelayCommand(() => {
+                    CreateAssemblerPageViewModel.SetBaseValues(OpacityPanels, ColorPanels, new AssemblerInfo());
                     MainPage = new Uri("pack://application:,,,/View/Pages/CreateAssemblerPage.xaml");
                 });
             }
@@ -145,6 +154,7 @@ namespace ModManager_Diploma.ViewModel
             get
             {
                 return new RelayCommand(() => {
+                    ReferenceViewModel.SetBaseValues(OpacityPanels, ColorPanels);
                     Page = new Uri("pack://application:,,,/View/Pages/Reference.xaml");
                 });
             }
@@ -221,6 +231,43 @@ namespace ModManager_Diploma.ViewModel
             return new SolidColorBrush((Color)ColorConverter.ConvertFromString(Ini.Read("ColorPanels", "ModManager")));
         }
 
+        public static ObservableCollection<GameInfo> GetAssemblersList()
+        {
+            if(PathToAssemblersFolder != "")
+            {
+                ObservableCollection<GameInfo> gameList = new ObservableCollection<GameInfo>();
+                string[] keys = Ini.GetKeys("GameList");
+                foreach (var item in keys)
+                {
+                    if (Directory.Exists(Path.Combine(PathToAssemblersFolder, item, "Assemblers")) &&
+                        Directory.GetDirectories(Path.Combine(PathToAssemblersFolder, item, "Assemblers")).Count() > 0)
+                    {
+                        ObservableCollection<AssemblerInfo> assemblersInGame = new ObservableCollection<AssemblerInfo>();
+                        foreach (var item2 in new DirectoryInfo(Path.Combine(PathToAssemblersFolder, item, "Assemblers")).GetDirectories().OrderBy(x => x.CreationTime))
+                        {
+                            assemblersInGame.Add(new AssemblerInfo(item2.Name, item));
+                        }
+                        gameList.Add(new GameInfo(assemblersInGame, item, Path.Combine(PathToAssemblersFolder, item)));
+                    }
+                }
+                /*foreach (var item in Directory.GetDirectories(PathToAssemblersFolder))
+                {
+                    if (Directory.Exists(Path.Combine(PathToAssemblersFolder, new DirectoryInfo(item).Name, "Assemblers")) &&
+                        Directory.GetDirectories(Path.Combine(PathToAssemblersFolder, new DirectoryInfo(item).Name, "Assemblers")).Count() > 0)
+                    {
+                        ObservableCollection<AssemblerInfo> assemblersInGame = new ObservableCollection<AssemblerInfo>();
+                        foreach (var item2 in Directory.GetDirectories(Path.Combine(PathToAssemblersFolder, new DirectoryInfo(item).Name, "Assemblers")))
+                        {
+                            assemblersInGame.Add(new AssemblerInfo(new DirectoryInfo(item2).Name, new DirectoryInfo(item).Name));
+                        }
+                        gameList.Add(new GameInfo(assemblersInGame, new DirectoryInfo(item).Name, item));
+                    }
+                }*/
+                return gameList;
+            }
+            return null;
+        }
+
         #region PagesControlsMethods
         private void CloseMainPage()
         {
@@ -238,8 +285,6 @@ namespace ModManager_Diploma.ViewModel
             OpacityPanels = opacityPanels;
             ColorPanels = colorPanels;
             
-            CreateAssemblerPageViewModel.SetOpacityPanels(OpacityPanels);
-            CreateAssemblerPageViewModel.SetColorPanels(ColorPanels);
             //CreateAssemblerPageViewModel.ColorPanels = ColorPanels;
             if (!Directory.Exists(PathToAssemblersFolder)) PathToAssemblersFolder = "";
             if (pathToBackground != null)
@@ -249,6 +294,7 @@ namespace ModManager_Diploma.ViewModel
             Ini.Write("PathToTheAssemblersFolder", PathToAssemblersFolder, "ModManager");
             Ini.Write("ColorPanels", ColorPanels.Color.ToString(), "ModManager");
             Ini.Write("OpacityPanels", OpacityPanels.ToString(), "ModManager");
+            ReferenceViewModel.SetBaseValues(OpacityPanels, ColorPanels);
 
             MainPage = null;
         }
@@ -256,14 +302,8 @@ namespace ModManager_Diploma.ViewModel
         private void ReplaceBackground(string pathToBackground)
         {
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ModManager/Images/img.png");
-            //MessageBox.Show(path + "\n" + pathToBackground);
             File.Delete(path);
             File.Copy(pathToBackground, path);
-        }
-
-        private void SetPathToAssemblers(string path)
-        {
-            PathToAssemblersFolder = path;
         }
 
         private void SetNewBackground(Brush brush)
@@ -273,20 +313,139 @@ namespace ModManager_Diploma.ViewModel
         #endregion
 
 
+
+        #region AssemblerSettings
+        public void OpenAssemblerInfo(AssemblerInfo assembler)
+        {
+            AssemblerInfoPageViewModel.SetBaseValues(OpacityPanels, ColorPanels, assembler);
+            Page = new Uri("pack://application:,,,/View/Pages/AssemblerInfoPage.xaml");
+        }
+        public void OpenAssemblerSettings(AssemblerInfo assembler)
+        {
+            MainPage = new Uri("pack://application:,,,/View/Pages/CreateAssemblerPage.xaml");
+            CreateAssemblerPageViewModel.SetBaseValues(OpacityPanels, ColorPanels, assembler);
+        }
+        public void SaveAssemblerOptions()
+        {
+            AssemblersList = GetAssemblersList();
+            MainPage = null;
+        }
+        public static void ChangeAssembler(AssemblerInfo assembler)
+        {
+            //_assemblersList = GetAssemblersList();
+            /*var game = _assemblersList.First(x => x.NameGame == assembler.GameName);
+            int index = game.Assemblers.IndexOf(assembler);
+            foreach (var item in game.Assemblers)
+            {
+                item.IsLoadedAssembler = false;
+            }
+            game.Assemblers[index] = new AssemblerInfo(assembler);*/
+            foreach(var item in _assemblersList.First(x => x.NameGame == assembler.GameName).Assemblers)
+            {
+                item.GetAssemblerIsLoaded();
+            }
+        }
+
+        public static void ReplaceAssembler(AssemblerInfo assembler)
+        {
+            var item = _assemblersList.First(x => x.NameGame == assembler.GameName);
+            item.Assemblers[item.Assemblers.IndexOf(assembler)] = assembler;
+        }
+        #endregion
+
+        #region AssemblerInfoPage
+
+        private void HandleAssemblerListChanged(object sender, EventArgs e)
+        {
+            OnPropertyChanged(nameof(AssemblersList));
+        }
+        private void HandleDeleteAssemblerChanged(object sender, EventArgs e)
+        {
+            ReferenceViewModel.SetBaseValues(OpacityPanels, ColorPanels);
+            Page = new Uri("pack://application:,,,/View/Pages/Reference.xaml");
+        }
+
+        public static void ChangeImageInAssembler(string gameName, string assemblerName)
+        {
+            var item = _assemblersList.First(x => x.NameGame == gameName);
+            AssemblerInfo assembler = item.Assemblers.First(x => x.Name == assemblerName);
+            assembler.PathToImg = assembler.GetNewImage(Path.Combine(PathToAssemblersFolder, assembler.GameName, "Assemblers", assembler.Name, "img.png"));
+            item.Assemblers[item.Assemblers.IndexOf(assembler)] = new AssemblerInfo(assembler);
+        }
+        public static void DeleteAssemblerFromList(string gameName, string assemblerName)
+        {
+            var item = _assemblersList.First(x => x.NameGame == gameName);
+            item.Assemblers.Remove(item.Assemblers.First(x => x.Name == assemblerName));
+            DeleteAssembler.Invoke(null, EventArgs.Empty);
+        }
+        public static void DeleteGameFromList(string gameName)
+        {
+            _assemblersList.Remove(_assemblersList.First(x => x.NameGame == gameName));
+            DeleteAssembler.Invoke(null, EventArgs.Empty);
+        }
+
+        #endregion
+
+
+        public static void CopyDirectory(string sourceDirName, string destDirName)
+        {
+            Directory.CreateDirectory(destDirName);
+
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+            FileInfo[] files = dir.GetFiles();
+            DirectoryInfo[] dirs = dir.GetDirectories();
+
+            foreach (FileInfo file in files)
+            {
+                string tempPath = Path.Combine(destDirName, file.Name);
+                file.CopyTo(tempPath, true);
+            }
+
+            foreach (DirectoryInfo subdir in dirs)
+            {
+                string tempPath = Path.Combine(destDirName, subdir.Name);
+                CopyDirectory(subdir.FullName, tempPath);
+            }
+        }
+        public static void ClearDirectory(string sourceDirName)
+        {
+            DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                file.Delete();
+            }
+
+            foreach (DirectoryInfo subdir in dir.GetDirectories())
+            {
+                subdir.Delete(true);
+            }
+        }
+
+
         public MainWindowViewModel()
         {
             StateWindow = WindowState.Normal;
             StartApp();
             Ini = GetIniFileSettings();
             BackgroundWindow = GetBackground();
-            Page = new Uri("pack://application:,,,/View/Pages/AboutTheProgram.xaml");
-            PathToAssemblersFolder = GetPathToAssemblersFolder();
             OpacityPanels = GetOpacityPanels();
             ColorPanels = GetColorPanels();
+            ReferenceViewModel.SetBaseValues(OpacityPanels, ColorPanels);
+            Page = new Uri("pack://application:,,,/View/Pages/Reference.xaml");
+            PathToAssemblersFolder = GetPathToAssemblersFolder();
+
+            AssemblersList = GetAssemblersList();
             OptionsPageViewModel.CloseOptions += CloseMainPage;
             OptionsPageViewModel.SaveOptions += SaveMainOptions;
             OptionsPageViewModel.SetNewBackground += SetNewBackground;
-            CreateAssemblerPageViewModel.CloseAssemblerOptions += CloseMainPage;
+            CreateAssemblerPageViewModel.CloseAssemblerOptions += /*CloseMainPage*/SaveAssemblerOptions;
+            AssemblerInfoPageViewModel.OpenSettings += OpenAssemblerSettings;
+            AssemblerInfo.OpenAssembler += OpenAssemblerInfo;
+            if(ImageChanged == null)
+            ImageChanged += HandleAssemblerListChanged;
+            if(DeleteAssembler == null)
+            DeleteAssembler += HandleDeleteAssemblerChanged;
         }
     }
 }

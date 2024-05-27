@@ -134,7 +134,6 @@
                             </LinearGradientBrush>
                         </Border.BorderBrush>
                     </Border>
-                    <!--"Пути до модовых папок"-->
                     <Label Foreground="#FFC7C7C7" Content="Игры" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <Border BorderThickness="0, 3, 0, 0" CornerRadius="30" Margin="100, 0">
                         <Border.BorderBrush>

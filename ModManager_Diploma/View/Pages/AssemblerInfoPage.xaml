@@ -1,0 +1,106 @@
+﻿<Page x:Class="ModManager_Diploma.View.Pages.AssemblerInfoPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ViewModel="clr-namespace:ModManager_Diploma.ViewModel"
+      xmlns:local="clr-namespace:ModManager_Diploma.View.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AssemblerInfoPage">
+    <Page.DataContext>
+        <ViewModel:AssemblerInfoPageViewModel/>
+    </Page.DataContext>
+
+    <Grid Grid.Column="1" Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition/>
+            <RowDefinition Height="100"/>
+
+        </Grid.RowDefinitions>
+        <Border Grid.RowSpan="15" Background="{Binding ColorPanels}" Opacity="{Binding OpacityPanels}" CornerRadius="15"/>
+
+
+        <!--<Border Width="60" Height="60" Background="Transparent" BorderThickness="5" CornerRadius="10">
+                        <Border.BorderBrush>
+                            <LinearGradientBrush>
+                                <GradientStop Color="#FF80671E"/>
+                                <GradientStop Color="#FF80671E" Offset="1"/>
+                                <GradientStop Color="#FFAB8633" Offset="0.6"/>
+                                <GradientStop Color="#FFFFFBCE" Offset="0.55"/>
+                                <GradientStop Color="#FFAB8633" Offset="0.5"/>
+                                <GradientStop Color="#FFAB8633" Offset="0.3"/>
+                                <GradientStop Color="#FFFFFBCE" Offset="0.25"/>
+                                <GradientStop Color="#FFAB8633" Offset="0.2"/>
+                                <GradientStop Color="#FFAB8633" Offset="0.8"/>
+                                <GradientStop Color="#FFFFFBCE" Offset="0.75"/>
+                                <GradientStop Color="#FFAB8633" Offset="0.7"/>
+                            </LinearGradientBrush>
+                        </Border.BorderBrush>
+                        <Image Margin="5" Source="/Source/Images/gear.png" Stretch="Fill"/>
+                    </Border>-->
+        <Image Stretch="Fill" Margin="22.5, 0" Opacity="0.9" HorizontalAlignment="Left" Source="{Binding Path=Assembler.PathToImg}" Width="55" Height="55"/>
+        <Button Margin="20, 0" HorizontalAlignment="Left" Focusable="false" Template="{DynamicResource ResourceKey=ImageTheButton}" Height="60" Width="60" Content="" Command="{Binding EditImageAssembler}">
+            <!--<Button.Resources>
+                <ImageSource x:Key="Img">/Source/Images/gear.png</ImageSource>
+            </Button.Resources>-->
+        </Button>
+        <TextBlock Text="{Binding Assembler.Name}" Background="Transparent" Foreground="#FFC7C7C7" FontSize="30" HorizontalAlignment="Center" Grid.Column="1" Grid.ColumnSpan="5" Margin="50,15"/>
+        <ScrollViewer PanningDeceleration="1" PanningRatio="0.5" Grid.Row="1" VerticalScrollBarVisibility="Hidden">
+            <ItemsControl Height="auto" ItemsSource="{Binding Assembler.ModList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+
+                        <StackPanel Orientation="Vertical"/>
+
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.ColumnSpan="3" BorderBrush="#FFC7C7C7" BorderThickness="1" CornerRadius="3"/>
+                            <Label HorizontalAlignment="Center" FontSize="25" Margin="5,0" Foreground="#FFC7C7C7" Content="{Binding Path=Number}"/>
+                            <Label Grid.Column="1" FontSize="25" Foreground="#FFC7C7C7" Content="{Binding Path=Name}"/>
+                            <CheckBox HorizontalAlignment="Center" IsChecked="{Binding Path=IsChecked}" Command="{Binding TestCommand}" Style="{DynamicResource CheckBoxStyle}" Grid.Column="2" VerticalAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <Grid Grid.Row="4" Grid.ColumnSpan="15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.ColumnSpan="15" Grid.RowSpan="15" Background="{Binding ColorPanels}" Opacity="{Binding OpacityPanels}" BorderThickness="0, 3, 0, 0" BorderBrush="LightGray" Margin="0" CornerRadius="0, 0, 15, 15"/>
+            <TextBlock VerticalAlignment="Center" FontSize="17" Margin="30,0, 10, 0" Foreground="#FFC7C7C7" Text="{Binding Assembler.ModList.Count, StringFormat=Количество модов: {0}}"/>
+            <TextBlock VerticalAlignment="Center" Grid.Column="1" FontSize="17" Margin="30,0, 10, 0" Foreground="#FFC7C7C7" Text="{Binding ModsWeight, StringFormat=Вес: {0} Мб.}"/>
+            <TextBlock VerticalAlignment="Center" Grid.Column="2" FontSize="17" Margin="30,0, 10, 0" Foreground="#FFC7C7C7" Text="{Binding Assembler.CoutOnMods, StringFormat=Включенных модов: {0}}"/>
+            <!--CoutOnMods-->
+            <Button Width="150" Grid.Row="1" Margin="10, 0, 10, 0" VerticalAlignment="Center" Focusable="False" Template="{DynamicResource ResourceKey=BrowseButtonInOptions}" Content="{Binding ButtonLoadUnloadText}" Command="{Binding LoadUnloadAssembler}">
+
+            </Button>
+            <Button Width="150" Grid.Row="1" Grid.Column="1" Margin="10, 0, 10, 0" VerticalAlignment="Center" Focusable="False" Template="{DynamicResource ResourceKey=BrowseButtonInOptions}" Content="Настройки" Command="{Binding OpenSettingsThisAssembler}">
+
+            </Button>
+            <Button Width="150" Grid.Row="1" Grid.Column="5" Margin="10, 0, 10, 0" VerticalAlignment="Center" Focusable="False" Template="{DynamicResource ResourceKey=BrowseButtonInOptions}" Content="Удалить" Command="{Binding DeleteAssembler}">
+
+            </Button>
+        </Grid>
+    </Grid>
+</Page>

@@ -10,7 +10,7 @@
       Title="Reference">
 
     <Page.DataContext>
-        <ViewModel:MainWindowViewModel/>
+        <ViewModel:ReferenceViewModel/>
     </Page.DataContext>
 
     <Grid Grid.Column="1" Margin="20">

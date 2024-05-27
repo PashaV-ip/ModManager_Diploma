@@ -619,13 +619,13 @@
                     </Image.Style>
                 </Image>
             </Border>
-            <Border x:Name="MouseOverBorder" Background="#FF8D8D8D">
+            <Border CornerRadius="5" x:Name="MouseOverBorder" Background="White">
                 <Border.Style>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="Opacity" Value="0"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsMouseOver, ElementName=Btn}" Value="true">
-                                <Setter Property="Opacity" Value="0.1"/>
+                                <Setter Property="Opacity" Value="0.3"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -883,9 +883,17 @@
     </LinearGradientBrush>
 
     <SolidColorBrush x:Key="ComboBox.Pressed.Editable.Button.Border" Color="#FF569DE5"/>
-    <SolidColorBrush x:Key="ComboBox.Disabled.Background" Color="#FFF0F0F0"/>
-    <SolidColorBrush x:Key="ComboBox.Disabled.Border" Color="#FFD9D9D9"/>
-    <SolidColorBrush x:Key="ComboBox.Disabled.Glyph" Color="#FFBFBFBF"/>
+    <!--<SolidColorBrush x:Key="ComboBox.Disabled.Background" Color="#FF0000"/>#FFF0F0F0-->
+
+    <LinearGradientBrush x:Key="ComboBox.Disabled.Background" EndPoint="0.5,1" StartPoint="0.5,0">
+        <GradientStop Color="#FF283244"/>
+        <GradientStop Color="#FF2B3548" Offset="1"/>
+        <GradientStop Color="#FF23293E" Offset="0.5"/>
+    </LinearGradientBrush>
+
+
+    <SolidColorBrush x:Key="ComboBox.Disabled.Border" Color="#FF505050"/> <!--#FFD9D9D9-->
+    <SolidColorBrush x:Key="ComboBox.Disabled.Glyph" Color="#FF505050"/>
     <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Background" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Border" Color="#FFBFBFBF"/>
     <SolidColorBrush x:Key="ComboBox.Disabled.Editable.Button.Background" Color="Transparent"/>

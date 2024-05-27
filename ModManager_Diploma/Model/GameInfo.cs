@@ -12,16 +12,26 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using ModManager_Diploma.ViewModel;
 using System.IO;
+using System.Collections.ObjectModel;
 
 namespace ModManager_Diploma.Model
 {
     public delegate void DeleteGame(GameInfo game);
     public class GameInfo : BaseViewModel
     {
+        private ObservableCollection<AssemblerInfo> _assemblers;
         private string _nameGame = "";
         private string _pathGame = "";
         private Visibility _visible = Visibility.Collapsed;
         private bool _isReadOnly = false;
+        public ObservableCollection<AssemblerInfo> Assemblers
+        {
+            get => _assemblers;
+            set
+            {
+                _assemblers = value;
+            }
+        }
         public string NameGame 
         {
             get => _nameGame;
@@ -93,8 +103,14 @@ namespace ModManager_Diploma.Model
                         "Все сборки зависящие от неё, будут удалены!", "Вы уверены?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                         if (result == DialogResult.Yes)
                         {
+                            if (Directory.Exists(Path.Combine(MainWindowViewModel.PathToAssemblersFolder, NameGame)))
+                            {
+                                System.Windows.MessageBox.Show("Папка существует");
+                                Directory.Delete(Path.Combine(MainWindowViewModel.PathToAssemblersFolder, NameGame), true);
+                            }
                             MainWindowViewModel.Ini.DeleteKey(NameGame, "GameList");
                             DeleteGameFromList(this);
+                            MainWindowViewModel.DeleteGameFromList(NameGame);
                         }
                     }
                     else
@@ -113,11 +129,15 @@ namespace ModManager_Diploma.Model
                     if(NameGame != "" && PathGame != "" && Directory.Exists(PathGame))
                     {   
                         MainWindowViewModel.Ini.Write(NameGame, PathGame, "GameList");
-                        string pathFolder = MainWindowViewModel.GetPathToAssemblersFolder();
-                        //if (pathFolder != "" && Directory.Exists(pathFolder))
-                        //{
-                        //    Directory.CreateDirectory(Path.Combine(pathFolder, NameGame));
-                        //}
+                        if (!Directory.Exists(GetPathToAssemblersThisGame()))
+                        {
+                            Directory.CreateDirectory(GetPathToAssemblersThisGame());
+                            IniFile ini = new IniFile(Path.Combine(GetPathToAssemblersThisGame(), "Settings.ini"));
+                            ini.Write("LoadedAssembler", "", "Config");
+                            ini.Write("ConfigsPath", "", "Config");
+                            ini.Write("WoldsPath", "", "Config");
+                            Directory.CreateDirectory(Path.Combine(GetPathToAssemblersThisGame(), "mods"));
+                        }
                         Visible = Visibility.Collapsed;
                         IsReadOnly = true;
                     }
@@ -127,6 +147,16 @@ namespace ModManager_Diploma.Model
                     }
                 });
             }
+        }
+
+        public string GetPathToAssemblersThisGame()
+        {
+            string pathFolder = MainWindowViewModel.GetPathToAssemblersFolder();
+            if(pathFolder != "")
+            {
+                return Path.Combine(pathFolder, NameGame);
+            }
+            return null;
         }
 
         public GameInfo(DeleteGame deleteGameFromList, string name, string path)
@@ -144,6 +174,12 @@ namespace ModManager_Diploma.Model
             IsReadOnly = false;
             Visible = Visibility.Visible;
             DeleteGameFromList = deleteGameFromList;
+        }
+        public GameInfo(ObservableCollection<AssemblerInfo> assemblers, string name, string path)
+        {
+            Assemblers = assemblers;
+            NameGame = name;
+            PathGame = path;
         }
     }
 }

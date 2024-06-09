@@ -16,19 +16,19 @@
 Первоначальная настройка приложения:
 +	перейдите в настройки, нажав на иконку шестерёнки в правом верхнем углу интерфейса (рисунок 7);
  
-![Image](https://sun9-22.userapi.com/impg/uhD-0tgHZKowkoARoqAhnda0rnazKAk5-zcRDA/r51y7MnvVnc.jpg?size=942x62&quality=96&sign=ad09e05f3113bafa5d389d04ab58668c&type=album, "Всплывающий текст")
+![Image](https://sun9-22.userapi.com/impg/uhD-0tgHZKowkoARoqAhnda0rnazKAk5-zcRDA/r51y7MnvVnc.jpg?size=942x62&quality=96&sign=ad09e05f3113bafa5d389d04ab58668c&type=album, "Верхняя панель окна")
 
 __Рисунок 7 – Панель управления окна приложения__
 
 +	укажите путь до папки, где будут храниться создаваемые вами сборки, под пунктом «Папка сборок» (рисунок 8);
 
-![Image](https://sun9-79.userapi.com/impg/Us9H56MrUNB1d0VDc9L3Gv23nG6iygQzzkSllA/X6ECt6L0P-M.jpg?size=898x549&quality=96&sign=e56e0c1168a6643276ca17eb6059fcad&type=album, "Всплывающий текст")
+![Image](https://sun9-79.userapi.com/impg/Us9H56MrUNB1d0VDc9L3Gv23nG6iygQzzkSllA/X6ECt6L0P-M.jpg?size=898x549&quality=96&sign=e56e0c1168a6643276ca17eb6059fcad&type=album, "Настройки (Первая часть)")
 
 __Рисунок 8 – Страница «Настройки приложения» (часть 1)__
 
 +	спуститесь ниже и добавьте перечень игр, с которыми программа будет взаимодействовать (рисунок 9);
  
- ![Image](https://sun9-55.userapi.com/impg/LTkYpb8Saosac1jWr7JCjOtQ2Pj1yNvaQa6o7g/TV464Qak9fQ.jpg?size=932x569&quality=96&sign=34da89148ba21e03d581665935b11e82&type=album, "Всплывающий текст")
+ ![Image](https://sun9-55.userapi.com/impg/LTkYpb8Saosac1jWr7JCjOtQ2Pj1yNvaQa6o7g/TV464Qak9fQ.jpg?size=932x569&quality=96&sign=34da89148ba21e03d581665935b11e82&type=album, "Настройки (Вторая часть)")
 
 __Рисунок 9 – Страница «Настройки приложения» (часть 2)__
 

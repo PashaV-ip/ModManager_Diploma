@@ -15,7 +15,6 @@
     </Page.DataContext>
 
     <Grid Width="900" Grid.Row="1">
-        <!--<Border Background="#FF101010" Opacity="0.6" Width="60" HorizontalAlignment="Left"/>-->
         <Border Background="#FF101010" Opacity="0.7"/>
         <Grid Margin="35,10">
             <Grid.RowDefinitions>
@@ -171,36 +170,22 @@
 
                                     <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Left" Margin="0,3,0,3">
                                         <Button Template="{DynamicResource ResourceKey=SmallImageButton}" Visibility="{Binding Visible}" Command="{Binding BrowseGamePath}" Margin="5, 0, 0, 0" Width="30" Height="30">
-                                            <!--<Button.Resources>
-                                                <ImageSource x:Key="Img">/Source/Images/folder.png</ImageSource>
-                                            </Button.Resources>-->
+                                            <Button.Resources>
+                                                <ImageSource x:Key="Img">pack://application:,,,/Source/Images/folder.png</ImageSource>
+                                            </Button.Resources>
                                         </Button>
                                         <Button Template="{DynamicResource ResourceKey=SmallImageButton}" Command="{Binding DeleteGame}" Margin="10, 0, 0, 0" Width="30" Height="30">
-                                            <!--<Button.Resources>
-                                                <ImageSource x:Key="Img">/Source/Images/delete.png</ImageSource>
-                                            </Button.Resources>-->
+                                            <Button.Resources>
+                                                <ImageSource x:Key="Img">pack://application:,,,/Source/Images/delete.png</ImageSource>
+                                            </Button.Resources>
                                         </Button>
                                         <Button Template="{DynamicResource ResourceKey=SmallImageButton}" Visibility="{Binding Visible}" Command="{Binding CompleteGame}" Margin="10, 0, 0, 0"  Width="30" Height="30">
-                                            <!--<Button.Resources>
-                                                <ImageSource x:Key="Img">/Source/Images/check.png</ImageSource>
-                                            </Button.Resources>-->
+                                            <Button.Resources>
+                                                <ImageSource x:Key="Img">pack://application:,,,/Source/Images/check.png</ImageSource>
+                                            </Button.Resources>
                                         </Button>
                                     </StackPanel>
                                 </Grid>
-
-
-
-
-                                <!--<Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="2" BorderBrush="Gray"/>
-                                    <Button Grid.Column="0" Content="{Binding Name}"/>
-                                    <Label Grid.Column="1" Content="{Binding Name}"/>
-                                </Grid>-->
-                                <!-- Можете добавить другие элементы управления для других свойств класса Test -->
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

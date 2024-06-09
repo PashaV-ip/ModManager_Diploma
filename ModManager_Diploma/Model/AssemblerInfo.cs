@@ -277,15 +277,6 @@ namespace ModManager_Diploma.Model
                 IsCheckedSaveWorlds = bool.Parse(string.IsNullOrEmpty(worldsChecked) ? false.ToString() : worldsChecked);
             }
             GetAssemblerIsLoaded();
-            /*string pathToGameIni = Path.Combine(MainWindowViewModel.PathToAssemblersFolder, GameName, "Settings.ini");
-            if (File.Exists(pathToGameIni))
-            {
-                IniFile ini = new IniFile(pathToGameIni);
-                string nameLoadedAssemblers = ini.Read("LoadedAssembler", "Config");
-                if (nameLoadedAssemblers != null && nameLoadedAssemblers == Name) IsLoadedAssembler = true;
-                else IsLoadedAssembler = false;
-
-            }*/
         }
         public AssemblerInfo(AssemblerInfo assemblerInfo)
         {

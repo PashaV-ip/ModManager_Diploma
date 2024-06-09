@@ -71,7 +71,7 @@
                             <Border Grid.ColumnSpan="3" BorderBrush="#FFC7C7C7" BorderThickness="1" CornerRadius="3"/>
                             <Label HorizontalAlignment="Center" FontSize="25" Margin="5,0" Foreground="#FFC7C7C7" Content="{Binding Path=Number}"/>
                             <Label Grid.Column="1" FontSize="25" Foreground="#FFC7C7C7" Content="{Binding Path=Name}"/>
-                            <CheckBox HorizontalAlignment="Center" IsChecked="{Binding Path=IsChecked}" Command="{Binding TestCommand}" Style="{DynamicResource CheckBoxStyle}" Grid.Column="2" VerticalAlignment="Center"/>
+                            <CheckBox HorizontalAlignment="Center" IsChecked="{Binding Path=IsChecked}" Command="{Binding OnOffThisMod}" Style="{DynamicResource CheckBoxStyle}" Grid.Column="2" VerticalAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

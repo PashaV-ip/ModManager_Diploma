@@ -42,7 +42,7 @@ namespace ModManager_Diploma.Model
         }
 
         public OnOffModInIniFile OnOffMod;
-        public ICommand TestCommand
+        public ICommand OnOffThisMod
         {
             get
             {

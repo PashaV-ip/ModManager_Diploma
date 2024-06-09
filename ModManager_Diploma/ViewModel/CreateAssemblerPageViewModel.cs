@@ -217,7 +217,7 @@ namespace ModManager_Diploma.ViewModel
             }
         }
 
-        public ICommand TestCommand
+        /*public ICommand TestCommand
         {
             get
             {
@@ -232,7 +232,7 @@ namespace ModManager_Diploma.ViewModel
                     //    Assembler.GameName + " " + Assembler.Name + " GameListCout: " + GameList.Count);
                 });
             }
-        }
+        }*/
         public ICommand BrowseConfigsFolder
         {
             get
@@ -286,7 +286,7 @@ namespace ModManager_Diploma.ViewModel
                 GetModListInThisAssembler(true);
                 GetModListInFolder(pathToModsHistory, false);
             }
-            ModList = new ObservableCollection<ModInfo>(ModList.OrderBy(x => x.Name));
+            ModList = new ObservableCollection<ModInfo>(ModList.OrderBy(x => x.Number));
             
         }
         public void GetModListInFolder(string path, bool checkedMods)
@@ -330,13 +330,6 @@ namespace ModManager_Diploma.ViewModel
         {
             if(!string.IsNullOrEmpty(Assembler.Name) && !string.IsNullOrEmpty(Assembler.GameName))
             GetModsForGame(_assembler.GameName);
-            //SelectGame = Assembler.GameName;
-            //AssemblerName = Assembler.Name;
-            //MessageBox.Show(SelectGame + "\n" + AssemblerName + "\nGameListCout: " + GameList.Count);
-            //OnPropertyChanged(nameof(SelectGame));
-            //OnPropertyChanged(nameof(AssemblerName));
-            //GetModsForGame(SelectGame);
-            //GetModListInThisAssembler();
         }
         public static void SetBaseValues(double opacityPanels, SolidColorBrush colorPanels, AssemblerInfo assembler)
         {

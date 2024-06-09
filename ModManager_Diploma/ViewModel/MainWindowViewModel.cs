@@ -17,6 +17,7 @@ using System.Collections.ObjectModel;
 using ModManager_Diploma.View.Pages;
 using System.Xml.Linq;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace ModManager_Diploma.ViewModel
 {
@@ -88,7 +89,6 @@ namespace ModManager_Diploma.ViewModel
             set
             {
                 _pathToAssemblersFolder = value;
-                //OnPropertyChanged(nameof(PathToAssemblersFolder));
             }
         }
         public double OpacityPanels
@@ -145,6 +145,16 @@ namespace ModManager_Diploma.ViewModel
                 return new RelayCommand(() => {
                     CreateAssemblerPageViewModel.SetBaseValues(OpacityPanels, ColorPanels, new AssemblerInfo());
                     MainPage = new Uri("pack://application:,,,/View/Pages/CreateAssemblerPage.xaml");
+                });
+            }
+        }
+
+        public ICommand OpenBrowser
+        {
+            get
+            {
+                return new RelayCommand(() => {
+                    Process.Start(new ProcessStartInfo("https://github.com/PashaV-ip/ModManager_Diploma") { UseShellExecute = true });
                 });
             }
         }
@@ -250,19 +260,6 @@ namespace ModManager_Diploma.ViewModel
                         gameList.Add(new GameInfo(assemblersInGame, item, Path.Combine(PathToAssemblersFolder, item)));
                     }
                 }
-                /*foreach (var item in Directory.GetDirectories(PathToAssemblersFolder))
-                {
-                    if (Directory.Exists(Path.Combine(PathToAssemblersFolder, new DirectoryInfo(item).Name, "Assemblers")) &&
-                        Directory.GetDirectories(Path.Combine(PathToAssemblersFolder, new DirectoryInfo(item).Name, "Assemblers")).Count() > 0)
-                    {
-                        ObservableCollection<AssemblerInfo> assemblersInGame = new ObservableCollection<AssemblerInfo>();
-                        foreach (var item2 in Directory.GetDirectories(Path.Combine(PathToAssemblersFolder, new DirectoryInfo(item).Name, "Assemblers")))
-                        {
-                            assemblersInGame.Add(new AssemblerInfo(new DirectoryInfo(item2).Name, new DirectoryInfo(item).Name));
-                        }
-                        gameList.Add(new GameInfo(assemblersInGame, new DirectoryInfo(item).Name, item));
-                    }
-                }*/
                 return gameList;
             }
             return null;
@@ -332,14 +329,6 @@ namespace ModManager_Diploma.ViewModel
         }
         public static void ChangeAssembler(AssemblerInfo assembler)
         {
-            //_assemblersList = GetAssemblersList();
-            /*var game = _assemblersList.First(x => x.NameGame == assembler.GameName);
-            int index = game.Assemblers.IndexOf(assembler);
-            foreach (var item in game.Assemblers)
-            {
-                item.IsLoadedAssembler = false;
-            }
-            game.Assemblers[index] = new AssemblerInfo(assembler);*/
             foreach(var item in _assemblersList.First(x => x.NameGame == assembler.GameName).Assemblers)
             {
                 item.GetAssemblerIsLoaded();
@@ -439,7 +428,7 @@ namespace ModManager_Diploma.ViewModel
             OptionsPageViewModel.CloseOptions += CloseMainPage;
             OptionsPageViewModel.SaveOptions += SaveMainOptions;
             OptionsPageViewModel.SetNewBackground += SetNewBackground;
-            CreateAssemblerPageViewModel.CloseAssemblerOptions += /*CloseMainPage*/SaveAssemblerOptions;
+            CreateAssemblerPageViewModel.CloseAssemblerOptions += SaveAssemblerOptions;
             AssemblerInfoPageViewModel.OpenSettings += OpenAssemblerSettings;
             AssemblerInfo.OpenAssembler += OpenAssemblerInfo;
             if(ImageChanged == null)

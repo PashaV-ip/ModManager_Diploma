@@ -23,6 +23,11 @@
         <Border Background="{Binding ColorPanels}"  Opacity="{Binding OpacityPanels}" MouseDown="Border_MouseDown"/>
         <Image Source="pack://application:,,,/Source/Images/Logo.png" HorizontalAlignment="Left" RenderOptions.BitmapScalingMode="HighQuality" Margin="5, 5, 0, 5"/>
         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Focusable="False"  Template="{DynamicResource ResourceKey=ControlButtons}" Command="{Binding OpenBrowser}">
+                <Button.Resources>
+                    <ImageSource x:Key="Img">pack://application:,,,/Source/Images/question.png</ImageSource>
+                </Button.Resources>
+            </Button>
             <Button Focusable="False"  Template="{DynamicResource ResourceKey=ControlButtons}" Command="{Binding OpenInfo}">
                 <Button.Resources>
                     <ImageSource x:Key="Img">pack://application:,,,/Source/Images/info.png</ImageSource>

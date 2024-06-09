@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>True</UseWindowsForms>
+    <ApplicationIcon>Source\Images\Logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +20,12 @@
     <None Remove="Source\Images\Logo.ico" />
     <None Remove="Source\Images\Logo.png" />
     <None Remove="Source\Images\pencil.png" />
+    <None Remove="Source\Images\question.png" />
     <None Remove="Source\Images\window minimize.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Source\Images\Logo.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +45,7 @@
     <Resource Include="Source\Images\Logo.ico" />
     <Resource Include="Source\Images\Logo.png" />
     <Resource Include="Source\Images\pencil.png" />
+    <Resource Include="Source\Images\question.png" />
     <Resource Include="Source\Images\window minimize.png" />
   </ItemGroup>
 

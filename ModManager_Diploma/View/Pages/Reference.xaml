@@ -31,7 +31,11 @@
         <StackPanel VerticalAlignment="Bottom" Grid.Row="2" Orientation="Vertical" Margin="10, 0, 0, 15">
             <TextBlock Text="Автор: Ваньшев Павел" TextWrapping="Wrap" FontSize="25" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC7C7C7"/>
             <TextBlock Text="Репозиторий проекта: " TextWrapping="Wrap" FontSize="25" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="#FFC7C7C7"/>
-            <TextBox Background="Transparent" Foreground="LightBlue" BorderThickness="0" IsReadOnly="True" Text="https://github.com/PashaV-ip/ModManager_Diploma" TextWrapping="Wrap" FontSize="25" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TextBlock Background="Transparent" Foreground="LightBlue" Text="" TextWrapping="Wrap" FontSize="25" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Hyperlink Command="{Binding OpenBrowser}">
+                    https://github.com/PashaV-ip/ModManager_Diploma
+                </Hyperlink>
+            </TextBlock>
         </StackPanel>
     </Grid>
 </Page>
